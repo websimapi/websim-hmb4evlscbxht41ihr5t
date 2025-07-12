@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stick-M Up - Stickman MMORPG</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "pathfinding": "https://esm.sh/pathfinding"
+      }
+    }
+    </script>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui">
+            <div id="hud">
+                
+                <div id="player-info-container">
+                    <div id="pfp-and-name">
+                        <div id="pfp-wrapper">
+                            <img id="playerAvatar" src="" alt="PFP">
+                            <img id="playerGangIcon" src="neutral-gang-icon.png" alt="Gang Icon">
+                            <span id="playerLevel" title="Level">1</span>
+                        </div>
+                        <div id="name-and-money">
+                            <strong id="playerName">Loading...</strong>
+                            <div id="moneyDisplay">
+                                <img src="money-icon.png" alt="$" id="moneyIcon" />
+                                <span id="playerMoney">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="weaponSlots">
+                    <div class="weapon-slot" id="weaponSlot1">
+                        <span class="weapon-name">Fists</span>
+                        <img src="" alt="" class="weapon-image">
+                    </div>
+                    <div class="weapon-slot" id="weaponSlot2">
+                        <span class="weapon-name">Empty</span>
+                        <img src="" alt="" class="weapon-image" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            
+            <div id="hud-stats-bars">
+                <div class="stat-bar">
+                    <span class="stat-label">HP:</span>
+                    <div class="bar">
+                        <div class="bar-fill health-bar" id="healthBar" style="width: 100%"></div>
+                    </div>
+                    <span id="healthText">100/100</span>
+                </div>
+                
+                <div class="stat-bar">
+                    <span class="stat-label">MP:</span>
+                    <div class="bar">
+                        <div class="bar-fill mana-bar" id="manaBar" style="width: 100%"></div>
+                    </div>
+                    <span id="manaText">50/50</span>
+                </div>
+                
+                <div class="stat-bar">
+                    <span class="stat-label">EXP:</span>
+                    <div class="bar">
+                        <div class="bar-fill exp-bar" id="expBar" style="width: 0%"></div>
+                    </div>
+                    <span id="expText">0/100</span>
+                </div>
+            </div>
+            
+            <div id="weaponInfo">
+                <div>Weapon: <span id="currentWeapon">Fists</span></div>
+                <div>Damage: <span id="weaponDamage">10</span></div>
+            </div>
+            
+            <div id="minimapContainer">
+                <div id="minimap">
+                    <canvas id="minimapCanvas"></canvas>
+                </div>
+                <button id="minimapToggle">-</button>
+            </div>
+            
+            <div id="gangInfo">
+                <div><strong>Gang Warfare</strong></div>
+                <div id="gangStats">
+                    <div class="gang-red">Red Gang: <span id="redScore">0</span></div>
+                    <div class="gang-blue">Blue Gang: <span id="blueScore">0</span></div>
+                    <div class="gang-green">Green Gang: <span id="greenScore">0</span></div>
+                    <div class="gang-yellow">Yellow Gang: <span id="yellowScore">0</span></div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <div>Territory Control:</div>
+                    <div id="territoryControl">Calculating...</div>
+                </div>
+            </div>
+            
+            <div id="chatContainer">
+                <div id="chatMessages"></div>
+                <input type="text" id="chatInput" placeholder="Type to chat... (Press Enter)" />
+            </div>
+            
+            <div id="bottomRightUI">
+                <!-- This container is now empty, content moved to #hud -->
+            </div>
+            
+            <div id="controls">
+                <div id="controlsIcon" title="Click to edit controls">&#9881;</div>
+                <div id="controlsPanel">
+                    <div><strong>Controls:</strong></div>
+                    <div id="controlsList">
+                        <!-- Controls will be populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="loadingScreen">
+            <div class="loading-title">STICK-M UP</div>
+            <div class="loading-subtitle">Connecting to the streets...</div>
+            <div class="loading-bar">
+                <div class="loading-fill" id="loadingFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls Modal -->
+    <div id="controlsModal">
+        <div id="controlsModalContent">
+            <div class="controls-header">
+                <h2>Edit Controls</h2>
+                <button id="closeControlsModal">&times;</button>
+            </div>
+            <div id="keybindsContainer">
+                <!-- Keybinds will be populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Context Menu -->
+    <div id="playerContextMenu">
+        <ul>
+            <li id="contextWalkHere">Walk Here</li>
+            <li id="contextPlug">Plug</li>
+            <li id="contextSwap">Swap</li>
+            <li id="contextShakedown">Shakedown</li>
+            <li id="contextMarkHostile">Mark Hostile</li>
+            <li id="contextCancel">Cancel</li>
+        </ul>
+    </div>
+
+    <script type="module" src="game.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

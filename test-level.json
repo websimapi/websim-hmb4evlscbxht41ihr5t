@@ -1,0 +1,19 @@
+{
+  "WORLD_WIDTH": 2000,
+  "WORLD_HEIGHT": 1200,
+  "SPAWN_REGION": {
+    "x": 800,
+    "y": 800,
+    "width": 400,
+    "height": 200,
+    "color": "0x27ae60"
+  },
+  "BUILDINGS": [
+    { "x": 100, "y": 200, "width": 200, "height": 150, "type": "apartment" },
+    { "x": 400, "y": 300, "width": 150, "height": 100, "type": "shop" },
+    { "x": 650, "y": 150, "width": 100, "height": 120, "type": "alley" },
+    { "x": 850, "y": 400, "width": 250, "height": 200, "type": "warehouse" },
+    { "x": 1200, "y": 250, "width": 180, "height": 140, "type": "bank" },
+    { "x": 1500, "y": 350, "width": 200, "height": 180, "type": "casino" }
+  ]
+}
